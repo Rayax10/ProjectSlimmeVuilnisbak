@@ -9,19 +9,18 @@ PIR_PIN = 18  # PIR sensor pin
 # Define static variables
 max_dist = 20
 min_dist = 2
-dist = 0
 alpha = 0.2
 percentage_full = 0
 update_threshold = 5  # Initial threshold value
+pir_wait_time = 5  # Wait time after PIR detection in seconds
 open_count = 0  # Counter for lid openings
-lid_opened = False  # Flag to track if the lid is opened
 
 def setup():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(TRIG, GPIO.OUT)
     GPIO.setup(ECHO, GPIO.IN)
     GPIO.setup(PIR_PIN, GPIO.IN)  # Set PIR pin as input
-
+    GPIO.add_event_detect(PIR_PIN, GPIO.BOTH)
 
 def distance():
     GPIO.output(TRIG, True)
@@ -52,21 +51,29 @@ def should_update_display(new_percentage, old_percentage, dist):
     threshold = calculate_update_threshold(dist)
     return abs(new_percentage - old_percentage) >= threshold
 
-def pir_callback(channel):
-    global open_count, lid_opened
-    if not lid_opened:
-        open_count += 1
-        lid_opened = True
-        print("Lid opened! Count:", open_count)
+def pir_triggered(dist, open_count):
+    if GPIO.input(PIR_PIN):
+        if 30 <= dist <= 100:
+            open_count += 1
+            print("Lid opened! Count:", open_count)
+            
+            # Wait for a few seconds before checking again
+            time.sleep(pir_wait_time)
+    else:
+        print('No movement')
+
+    return open_count
 
 if __name__ == '__main__':
     try:
         setup()
-        GPIO.add_event_detect(PIR_PIN, GPIO.RISING, callback=pir_callback, bouncetime=300)
         
         while True:
             dist = distance()
             print("Distance: {:.2f} cm".format(dist))
+
+            # Process PIR detection
+            open_count = pir_triggered(dist, open_count)
 
             if min_dist <= dist <= max_dist:
                 new_percentage_full = calculate_fullness_percentage(dist, percentage_full)
@@ -75,9 +82,6 @@ if __name__ == '__main__':
                     percentage_full = new_percentage_full
                     print("Fullness Percentage: {:.2f}%".format(percentage_full))
                     
-            elif lid_opened:
-                lid_opened = False  # Reset the flag when the lid is closed
-
             time.sleep(1)
     except KeyboardInterrupt:
         GPIO.cleanup()
