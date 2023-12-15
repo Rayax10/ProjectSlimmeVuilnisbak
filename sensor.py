@@ -64,24 +64,4 @@ def pir_triggered(dist, open_count):
 
     return open_count
 
-if __name__ == '__main__':
-    try:
-        setup()
-        
-        while True:
-            dist = distance()
-            print("Distance: {:.2f} cm".format(dist))
 
-            # Process PIR detection
-            open_count = pir_triggered(dist, open_count)
-
-            if min_dist <= dist <= max_dist:
-                new_percentage_full = calculate_fullness_percentage(dist, percentage_full)
-                
-                if should_update_display(new_percentage_full, percentage_full, dist):
-                    percentage_full = new_percentage_full
-                    print("Fullness Percentage: {:.2f}%".format(percentage_full))
-                    
-            time.sleep(1)
-    except KeyboardInterrupt:
-        GPIO.cleanup()
