@@ -20,7 +20,7 @@ if __name__ == '__main__':
                     percentage_full = new_percentage_full
 
                     # Display percentage on OLED
-                    display.display_percentage(str(percentage_full))
+                    display.display_percentage_value(str(percentage_full))
                     print("Fullness Percentage: {:.2f}%".format(percentage_full))
 
                     # Display statistics on OLED (add this line)
