@@ -11,6 +11,7 @@ if __name__ == '__main__':
 
         percentage_full = 0  # Initieel percentage
         display_mode = "percentage"  # Houd bij welke modus wordt weergegeven
+        data = []
 
         while True:
             # Lees de knopstatus
@@ -20,7 +21,7 @@ if __name__ == '__main__':
                     display_mode = "statistics"
                     print("Switching to Statistics Mode")
                     # Display statistics on OLED
-                    display.display_statistics([sensor.distance()])
+                    display.display_statistics(data)
                 else:
                     display_mode = "percentage"
                     print("Switching to Percentage Mode")
@@ -29,10 +30,11 @@ if __name__ == '__main__':
                     print("Fullness Percentage: {:.2f}%".format(percentage_full))
 
             dist = sensor.distance()
+            data.append(dist)
             print("Distance: {:.2f} cm".format(dist))
 
             # Process PIR detection
-            open_count = sensor.pir_triggered(dist, open_count)
+            open_count = sensor.pir_triggered(dist, sensor.open_count)
 
             if sensor.min_dist <= dist <= sensor.max_dist:
                 new_percentage_full = sensor.calculate_fullness_percentage(dist, percentage_full)
@@ -46,7 +48,7 @@ if __name__ == '__main__':
                         print("Fullness Percentage: {:.2f}%".format(percentage_full))
                         
                         # Update LED's based on percentage
-                        led.leds(percentage_full)
+                        leds.leds(percentage_full)
                     else:
                         # Display statistics on OLED
                         display.display_statistics([dist])

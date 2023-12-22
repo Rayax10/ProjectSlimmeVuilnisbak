@@ -41,7 +41,7 @@ def calculate_fullness_percentage(dist, current_percentage):
     # Assuming 2 cm is 0% full and 20 cm is 100% full
     percentage = (dist - min_dist) / (max_dist - min_dist) * 100
     new_percentage = alpha * percentage + (1 - alpha) * current_percentage
-    return max(0, min(100, new_percentage))  # Ensure the result is between 0 and 100
+    return max(0, min(100, int(new_percentage)))  # Ensure the result is between 0 and 100
 
 def calculate_update_threshold(dist):
     # Adjust the threshold based on the distance

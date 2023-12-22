@@ -38,7 +38,7 @@ def display_statistics(data):
     display_text = f"Mean: {mean_value:.2f}\nMedian: {median_value}\nMode: {mode_value}"
 
     # Load font.
-    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 12)
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 7)
 
     # Draw a white background.
     draw.rectangle((0, 0, width, height), outline=255, fill=255)
@@ -65,7 +65,7 @@ def display_percentage(percentage):
     draw.rectangle((0, 0, width, height), outline=255, fill=255)
  
     # Define text and get its size.
-    text = percentage
+    text = percentage + "%"
     text_width, text_height = draw.textsize(text, font=font)
  
     # Calculate text position to center it on the display.
