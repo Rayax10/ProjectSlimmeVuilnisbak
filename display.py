@@ -78,3 +78,5 @@ def display_percentage(percentage):
     # Display the image on the OLED.
     display.image(image)
     display.show()
+    
+display_percentage("45")

@@ -7,8 +7,8 @@ ECHO = 20
 PIR_PIN = 18  # PIR sensor pin
 
 # Define static variables
-max_dist = 20
-min_dist = 2
+max_dist = 17.70  # Grootste afstand bij een lege prullenbak
+min_dist = 2   # Kleinste afstand bij een volle prullenbak
 alpha = 0.2
 percentage_full = 0
 update_threshold = 5  # Initial threshold value
@@ -38,8 +38,8 @@ def distance():
     return distance
 
 def calculate_fullness_percentage(dist, current_percentage):
-    # Assuming 2 cm is 0% full and 20 cm is 100% full
-    percentage = (dist - min_dist) / (max_dist - min_dist) * 100
+    # Assuming 2 cm is 0% full and 22 cm is 100% full
+    percentage = 100 - ((dist - min_dist) / (max_dist - min_dist) * 100)
     new_percentage = alpha * percentage + (1 - alpha) * current_percentage
     return max(0, min(100, int(new_percentage)))  # Ensure the result is between 0 and 100
 
@@ -63,5 +63,3 @@ def pir_triggered(dist, open_count):
         print('No movement')
 
     return open_count
-
-

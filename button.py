@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 
-BUTTON_PIN = 25
+BUTTON_PIN = 22
 
 def setup_button():
     GPIO.setmode(GPIO.BCM)
@@ -10,16 +10,16 @@ def setup_button():
 def is_button_pressed():
     return GPIO.input(BUTTON_PIN) == GPIO.LOW
 
-# if __name__ == '__main__':
-#     try:
-#         setup_button()
+if __name__ == '__main__':
+    try:
+        setup_button()
 
-#         while True:
-#             if is_button_pressed():
-#                 print("Button is pressed!")
+        while True:
+            if is_button_pressed():
+                print("Button is pressed!")
 
-#             time.sleep(0.4)  # Voeg een kleine vertraging toe om de CPU niet te zwaar te belasten
+            time.sleep(0.4)  # Voeg een kleine vertraging toe om de CPU niet te zwaar te belasten
         
 
-#     except KeyboardInterrupt:
-#         GPIO.cleanup()
+    except KeyboardInterrupt:
+        GPIO.cleanup()
